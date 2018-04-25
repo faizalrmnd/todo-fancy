@@ -4,10 +4,11 @@ const mongoose = require('mongoose');
 
 module.exports = {
   getList: function(req, res) {
-    let id = mongoose.Types.ObjectId(req.params.id)
+    // let id = mongoose.Types.ObjectId(req.params.id)
 
     users
-      .findById(id)
+      // .findByI
+      .findOne({ idFB: req.params.id })
       .populate('todo')
       .then(user => {
         res.status(200).json({
@@ -22,31 +23,33 @@ module.exports = {
       })
   },
   addList: function(req, res) {
-    let id = mongoose.Types.ObjectId(req.params.id)
+    // let id = mongoose.Types.ObjectId(req.params.id)
 
     let newList = new list({
+      title: req.body.title,
       activity: req.body.activity,
-      status: 'not yet'
+      status: 'not-yet'
     })
 
     newList.save((err, result) => {
       if(err) {
         console.log(err);
       } else {
-        users.findByIdAndUpdate(id, {
-          todo: mongoose.Types.ObjectId(result.id)
-        })
-        .then(update => {
-          res.status(200).json({
-            message: `berhasil menambah data ${result.activity}`,
-            data: update
+        users
+          .findOneAndUpdate({ idFB: req.params.id }, {
+            $push: { todo: mongoose.Types.ObjectId(result.id) }
           })
-        })
-        .catch(err => {
-          res.status(500).json({
-            message: 'failed to update data'
+          .then(update => {
+            res.status(200).json({
+              message: `berhasil menambah data ${result.activity}`,
+              data: update
+            })
           })
-        })
+          .catch(err => {
+            res.status(500).json({
+              message: 'failed to update data'
+            })
+          })
       }
     })
   },
