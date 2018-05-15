@@ -1,12 +1,12 @@
 
 function statusChangeCallback(response) {
   if (response.status === 'connected') {
-    if (window.location.href !== 'https://56b8e2f9.ngrok.io/todolist.html') {
+    if (window.location.href !== 'https://fa3a4261.ngrok.io/todolist.html') {
       window.location.href="todolist.html"
     }
     testAPI();
   } else {
-    if (window.location.href !== 'https://56b8e2f9.ngrok.io/index.html') {
+    if (window.location.href !== 'https://fa3a4261.ngrok.io/index.html') {
       window.location.href="index.html"
     }
 
